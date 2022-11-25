@@ -21,12 +21,8 @@ function startSimulation() {
     // create a renderer
     var render = Render.create({
         element: document.body,
-        //canvas: document.getElementById("matter"),
+        canvas: document.getElementById("matter"),
         engine: engine,
-        options: {
-            width: 600,
-            height: 300,
-        }
     });
 
     var select = function(root, selector) {
