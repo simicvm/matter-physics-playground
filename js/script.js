@@ -4,10 +4,17 @@ function startSimulation() {
         Render = Matter.Render,
         Runner = Matter.Runner,
         Bodies = Matter.Bodies,
-        Composite = Matter.Composite;
+        Composite = Matter.Composite,
+        Svg = Matter.Svg;
   
     // create an engine
-    var engine = Engine.create();
+    var engine = Engine.create({
+        gravity: {
+            x: 0,
+            y: 0,
+            scale: 0.001,
+        }
+    });
   
     // create a renderer
     var render = Render.create({
@@ -15,20 +22,44 @@ function startSimulation() {
         //canvas: document.getElementById("matter"),
         engine: engine,
         options: {
-            width: false,
-            height: false,
-            hasBounds: true,
-            showDebug: true,
+            width: 600,
+            height: 300,
         }
     });
-  
+
+    var select = function(root, selector) {
+        return Array.prototype.slice.call(root.querySelectorAll(selector));
+    };
+
+    var loadSvg = function(url) {
+        return fetch(url)
+            .then(function(response) { return response.text(); })
+            .then(function(raw) { return (new window.DOMParser()).parseFromString(raw, 'image/svg+xml'); });
+    };
+
     // create two boxes and a ground
-    var boxA = Bodies.rectangle(200, 290, 10, 10);
-    var boxB = Bodies.rectangle(200, 120, 10, 10);
-    var ground = Bodies.rectangle(153, 170, 306, 50, { isStatic: true });
+    var boxA = Bodies.rectangle(200, 120, 20, 20);
+    //var boxB = Bodies.rectangle(200, 120, 10, 10);
+    //var ground = Bodies.rectangle(153, 170, 306, 50, { isStatic: true });
   
-    // add all of the bodies to the world
-    Composite.add(engine.world, [boxA, boxB, ground]);
+    loadSvg('./svg/spaceship-small.svg')
+        .then(function(root) {
+            var paths = select(root, 'path');
+
+            var vertexSets = paths.map(function(path) { return Svg.pathToVertices(path, 30); });
+
+            var agent = Bodies.fromVertices(100, 100, vertexSets, {
+                render: {
+                    fillStyle: '#060a19',
+                    strokeStyle: '#060a19',
+                    lineWidth: 1,
+                }
+            }, true);
+            // add all of the bodies to the world
+            //Composite.add(engine.world, [boxA, boxB, ground]);
+            Composite.add(engine.world, [boxA, agent]);
+        });
+
   
     // run the renderer
     Render.run(render);
@@ -38,4 +69,4 @@ function startSimulation() {
   
     // run the engine
     Runner.run(runner, engine);
-    }
+}
