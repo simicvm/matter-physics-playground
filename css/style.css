@@ -1,0 +1,28 @@
+.flex-container {
+  display: flex;
+  align-items: center;
+  height: 50vh;
+  background-color: transparent;
+}
+
+.controls {
+  display: flex;
+  margin: 2em;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.canvas #matter {
+  /*position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);*/
+  border-style: solid;
+  border-color: rgb(24, 156, 156);
+}
+
+h1 {
+  display: flex;
+  font-size: 3rem;
+  color: green;
+  justify-content: center;
+}
