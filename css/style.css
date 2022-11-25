@@ -7,12 +7,11 @@
 
 .controls {
   margin: 2em;
-  justify-content: center;
-  flex-direction: column;
+  /*justify-content: center;*/
 }
 
 canvas#matter {
-  /*border-style: solid;*/
+  border-style: solid;
   border-color: rgb(24, 156, 156);
 }
 

@@ -85,7 +85,6 @@ function startSimulation() {
                 }
             }, true);
             // add all of the bodies to the world
-            //Composite.add(engine.world, [boxA, boxB, ground]);
             Composite.add(
                 engine.world,
                 [
