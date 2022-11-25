@@ -1,3 +1,12 @@
+function wall(x, y, width, height) {
+  return Matter.Bodies.rectangle(x, y, width, height,  {
+    isStatic: true,
+    render: { visible: true }
+  });
+}
+
+var wallThickness = 10;
+
 function startSimulation() {
     // module aliases
     var Engine = Matter.Engine,
@@ -35,12 +44,34 @@ function startSimulation() {
             .then(function(raw) { return (new window.DOMParser()).parseFromString(raw, 'image/svg+xml'); });
     };
 
-    // create two boxes and a ground
+    // create a boxes and walls
     var boxA = Bodies.rectangle(200, 120, 20, 20);
-    //var boxB = Bodies.rectangle(200, 120, 10, 10);
-    //var ground = Bodies.rectangle(153, 170, 306, 50, { isStatic: true });
+    var wallLeft = wall(
+        - wallThickness / 2,
+        render.options.height / 2,
+        wallThickness,
+        render.options.height
+    );
+    var wallRight = wall(
+        render.options.width + wallThickness / 2,
+        render.options.height / 2,
+        wallThickness,
+        render.options.height
+    );
+    var wallTop = wall(
+        render.options.width / 2,
+        - wallThickness / 2,
+        render.options.width,
+        wallThickness
+    );
+    var wallBottom = wall(
+        render.options.width / 2,
+        render.options.height + wallThickness / 2,
+        render.options.width,
+        wallThickness
+    );
   
-    loadSvg('./svg/spaceship-small.svg')
+    loadSvg('./svg/rocket-small.svg')
         .then(function(root) {
             var paths = select(root, 'path');
 
@@ -55,7 +86,17 @@ function startSimulation() {
             }, true);
             // add all of the bodies to the world
             //Composite.add(engine.world, [boxA, boxB, ground]);
-            Composite.add(engine.world, [boxA, agent]);
+            Composite.add(
+                engine.world,
+                [
+                    wallLeft,
+                    wallRight,
+                    wallTop,
+                    wallBottom,
+                    boxA,
+                    agent
+                ]
+            );
         });
 
 
