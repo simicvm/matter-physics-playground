@@ -5,6 +5,8 @@ function startSimulation() {
         Runner = Matter.Runner,
         Bodies = Matter.Bodies,
         Composite = Matter.Composite,
+        Mouse = Matter.Mouse,
+        MouseConstraint = Matter.MouseConstraint,
         Svg = Matter.Svg;
   
     // create an engine
@@ -60,6 +62,22 @@ function startSimulation() {
             Composite.add(engine.world, [boxA, agent]);
         });
 
+
+    // add mouse control
+    var mouse = Mouse.create(render.canvas), 
+        mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.2,
+                render: {
+                    visible: true
+                }
+            }
+        });
+    Composite.add(engine.world, mouseConstraint)
+
+    // keep the mouse in sync with rendering
+    render.mouse = mouse;
   
     // run the renderer
     Render.run(render);
